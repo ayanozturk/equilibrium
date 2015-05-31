@@ -17,6 +17,16 @@ return array(
                     ),
                 ),
             ),
+            'equilibrium' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route' => '/equilibrium[/:input]',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Index',
+                        'action' => 'equilibrium',
+                    ),
+                ),
+            ),
         ),
     ),
     'service_manager' => array(

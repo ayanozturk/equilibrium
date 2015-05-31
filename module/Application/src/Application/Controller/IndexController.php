@@ -15,9 +15,31 @@ class IndexController extends AbstractActionController
      */
     public function indexAction()
     {
-        $view = new ViewModel();
+        return new ViewModel();
+    }
 
-        $inputArray = array(-7, 1, 5, 2, -4, 3, 0);
+    /**
+     * @return ViewModel
+     * @throws \Exception
+     */
+    public function equilibriumAction()
+    {
+        $view = new ViewModel();
+        $inputString = $this->params()->fromRoute('input', null);
+
+        if (!$inputString) {
+            throw new \Exception('No Input');
+        }
+
+        $inputArray = explode(',', $inputString);
+        foreach ($inputArray as $key => $value) {
+            if (is_numeric(trim($value))) {
+                $inputArray[$key] = (int)trim($value);
+            } else {
+                unset($inputArray[$key]);
+            }
+        }
+
         $equilibrium = $this->Equilibrium($inputArray);
 
         $view->setVariable('input', $inputArray);

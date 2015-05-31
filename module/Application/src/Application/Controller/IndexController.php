@@ -31,18 +31,13 @@ class IndexController extends AbstractActionController
             throw new \Exception('No Input');
         }
 
-        $inputArray = explode(',', $inputString);
-        foreach ($inputArray as $key => $value) {
-            if (is_numeric(trim($value))) {
-                $inputArray[$key] = (int)trim($value);
-            } else {
-                unset($inputArray[$key]);
-            }
-        }
+        /* @var $equilibriumService \Application\Service\Equilibrium */
+        $equilibriumService = $this->getServiceLocator()->get('Application\Service\Equilibrium');
+        $equilibriumService->setInput($inputString);
 
-        $equilibrium = $this->Equilibrium($inputArray);
+        $equilibrium = $equilibriumService->getEquilibrium();
 
-        $view->setVariable('input', $inputArray);
+        $view->setVariable('input', $equilibriumService->getInput());
         $view->setVariable('equilibrium', $equilibrium);
         return $view;
     }

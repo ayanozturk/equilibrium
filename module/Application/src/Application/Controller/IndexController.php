@@ -31,13 +31,9 @@ class IndexController extends AbstractActionController
             throw new \Exception('No Input');
         }
 
-        /* @var $equilibriumService \Application\Service\Equilibrium */
-        $equilibriumService = $this->getServiceLocator()->get('Application\Service\Equilibrium');
-        $equilibriumService->setInput($inputString);
+        $equilibrium = $this->Equilibrium($inputString);
 
-        $equilibrium = $equilibriumService->getEquilibrium();
-
-        $view->setVariable('input', $equilibriumService->getInput());
+        $view->setVariable('input', $inputString);
         $view->setVariable('equilibrium', $equilibrium);
         return $view;
     }

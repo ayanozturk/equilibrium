@@ -2,6 +2,7 @@
 namespace Application\Controller\Plugin;
 
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
+use Application\Service\Equilibrium as EquilibriumService;
 
 /**
  * Class Equilibrium
@@ -9,28 +10,40 @@ use Zend\Mvc\Controller\Plugin\AbstractPlugin;
  */
 class Equilibrium extends AbstractPlugin
 {
+
+    /* @var EquilibriumService */
+    protected $equilibriumService;
+
     /**
-     * @param array $array
+     * @param string|array $input
      * @return array
      */
-    public function __invoke(array $array)
+    public function __invoke($input)
     {
-        $equilibriumArray = array();
+        $this->getEquilibriumService()->setInput($input);
 
-        // Start from right and move left
-        $right = array_sum($array);
-        $left = 0;
+        return $this->getEquilibriumService()->getEquilibrium();
+    }
 
-        foreach ($array as $key => $value) {
-            $right -= $value;
-
-            if ($right === $left) {
-                $equilibriumArray[] = $key;
-            }
-
-            $left += $value;
+    /**
+     * @return EquilibriumService
+     */
+    public function getEquilibriumService()
+    {
+        if (!$this->equilibriumService) {
+            $this->setEquilibriumService($this->getController()->getServiceLocator()->get('Application\Service\Equilibrium'));
         }
 
-        return $equilibriumArray;
+        return $this->equilibriumService;
+    }
+
+    /**
+     * @param EquilibriumService $equilibriumService
+     * @return $this
+     */
+    public function setEquilibriumService(EquilibriumService $equilibriumService)
+    {
+        $this->equilibriumService = $equilibriumService;
+        return $this;
     }
 }
